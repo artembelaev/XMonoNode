@@ -1,0 +1,7 @@
+{
+  "name": "com.github.artembelaev-ural.xmononode",
+  "description": "xMonoNode includes a node library, a set of APIs and an editor interface for creating and editing custom node graphs.",
+  "version": "0.2.0",
+  "unity": "2021.1",
+  "displayName": "xMonoNode"
+}

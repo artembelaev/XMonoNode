@@ -1,0 +1,32 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using XMonoNode;
+
+public class #SCRIPTNAME# : MonoNode 
+{
+    // Use this for initialization
+    protected override void Init() 
+    {
+        base.Init();
+        #NOTRIM#
+	}
+
+    // Return the correct value of an output port when requested
+    public override object GetValue(NodePort port) 
+    {
+        return null; // Replace this
+    }
+	
+    // Start is called before the first frame update
+    void Start()
+    {
+        #NOTRIM#
+    }
+    
+    // Update is called once per frame
+    void Update()
+    {
+        #NOTRIM#
+    }
+}
