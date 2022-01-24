@@ -20,6 +20,7 @@ namespace XMonoNodeEditor {
 
         protected virtual void OnGUI()
         {
+//            Debug.Log("NodeEditorWindow.OnGUI()");
             Event e = Event.current;
             Matrix4x4 m = GUI.matrix;
             if (graph == null) return;

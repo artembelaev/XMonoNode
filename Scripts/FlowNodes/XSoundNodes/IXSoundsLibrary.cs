@@ -9,15 +9,36 @@ namespace XMonoNode
         public static string SoundLibraryResourcePath = "SystemInstantiator/Sounds";
 
         private static IXSoundsLibrary instance = null;
+        
+
+#if UNITY_EDITOR
+        private static float            UpdateTimeSec = 5f;
+        private static System.DateTime  lastUpdateTime = System.DateTime.Now;
+
+        private static bool CanReloadByTime()
+        {
+            System.DateTime currentTime = System.DateTime.Now;
+            bool result = (currentTime - lastUpdateTime).TotalSeconds > UpdateTimeSec;
+            if (result)
+            {
+                lastUpdateTime = currentTime;
+            }
+            return result;
+        }
+#endif
 
         /// <summary>
         /// Use in your code to access IXSoundsLibrary singleton
         /// </summary>
         public static IXSoundsLibrary Get()
         {
-            if (instance == null || Application.isEditor == true)
+            if (instance == null
+#if UNITY_EDITOR
+                ||
+                (Application.isEditor == true && CanReloadByTime())
+#endif
+                )
             {
-                Debug.Log("Load");
                 GameObject obj = ResourcesLoader.Load<GameObject>(SoundLibraryResourcePath);
                 if (obj != null)
                 {
