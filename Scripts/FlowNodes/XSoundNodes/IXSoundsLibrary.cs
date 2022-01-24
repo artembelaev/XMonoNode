@@ -15,8 +15,9 @@ namespace XMonoNode
         /// </summary>
         public static IXSoundsLibrary Get()
         {
-            if (instance == null)
+            if (instance == null || Application.isEditor == true)
             {
+                Debug.Log("Load");
                 GameObject obj = ResourcesLoader.Load<GameObject>(SoundLibraryResourcePath);
                 if (obj != null)
                 {
