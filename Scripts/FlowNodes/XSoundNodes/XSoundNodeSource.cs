@@ -54,6 +54,11 @@ namespace XMonoNode
 
         public override object GetValue(NodePort port)
         {
+            if (this == null)
+            {
+                return new AudioSources();
+            }
+
             if (audioOutput == null)
             {
                 audioOutput = new AudioSources();
@@ -61,7 +66,7 @@ namespace XMonoNode
 
             audioOutput.List.Clear();
 
-            if (port.ConnectionCount == 0)
+            if (port == null || port.ConnectionCount == 0)
             {
                 return audioOutput;
             }
@@ -70,28 +75,29 @@ namespace XMonoNode
 
             if (sounds == null)
             {
-                Debug.LogErrorFormat("IXSoundsLibraryInstance is null {0}.{1}", gameObject.name, Name);
+                Debug.LogErrorFormat("IXSoundsLibraryInstance is null {0}.{1}", gameObject != null ? gameObject.name : "null", Name);
                 return audioOutput;
             }
 
             if (soundId == -1)
             {
-                Debug.LogErrorFormat(this, "Лёха!!! У ноды сурса звука id -1! {0} ({1})".Color(Color.magenta), gameObject.name, Name);
+                Debug.LogErrorFormat(this, "Лёха!!! У ноды сурса звука id -1! {0} ({1})".Color(Color.magenta), gameObject != null ? gameObject.name : "null", Name);
                 return audioOutput;
             }
 
             AudioSource source = sounds.Play(soundId, PlayParameters);
-            if (customParamsPort.GetInputValue(customParameters) == true)
+            
+            if (source != null && customParamsPort != null)
             {
-                source.volume = volumePort.GetInputValue(volume);
-                source.pitch = pitchPort.GetInputValue(pitch);
-            }
+                if (customParamsPort.GetInputValue(customParameters) == true && volumePort != null && pitchPort != null)
+                {
+                    source.volume = volumePort.GetInputValue(volume);
+                    source.pitch = pitchPort.GetInputValue(pitch);
+                }
 
-            source.transform.parent = transform? transform.parent : null;
-            source.transform.localPosition = Vector3.zero;
+                source.transform.parent = transform != null ? transform.parent : null;
+                source.transform.localPosition = Vector3.zero;
 
-            if (source != null)
-            {
                 audioOutput.List.Add(source);
             }
             else
