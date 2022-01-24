@@ -35,7 +35,7 @@ namespace XMonoNode
             if (instance == null
 #if UNITY_EDITOR
                 ||
-                (Application.isEditor == true && CanReloadByTime())
+                (Application.isPlaying == false && CanReloadByTime())
 #endif
                 )
             {
@@ -68,6 +68,16 @@ namespace XMonoNode
         public AudioSource Play(AudioClip clip);
 
         public Dictionary<int, string> GetSounds();
+
+        //public Transform DisabledPoolRoot
+        //{
+        //    get;
+        //}
+
+        //public Transform ContainersParent
+        //{
+        //    get;
+        //}
     }
 
 
