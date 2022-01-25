@@ -10,12 +10,13 @@ namespace XMonoNode
         public static string NO_CONTAINER = "-: None";
 
         [SerializeField]
+        private string          containerFileName = "";
+        [SerializeField]
         private bool showButtons = true;
 
         [SerializeField]
         private string          pathToContainers = "";
-        [SerializeField]
-        private string          containerFileName = "";
+        
 
         [SerializeField]
         protected bool          drawPathToContainers = true;
