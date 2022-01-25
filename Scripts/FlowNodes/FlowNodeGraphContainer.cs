@@ -208,6 +208,11 @@ namespace XMonoNode
 
         public void CreatePoolRoot()
         {
+            if (poolRoot != null)
+            {
+                return;
+            }
+
             poolRoot = new GameObject("pool").transform;
 #if UNITY_EDITOR
             if (Application.isEditor)

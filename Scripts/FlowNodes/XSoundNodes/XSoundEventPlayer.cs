@@ -57,8 +57,8 @@ namespace XMonoNode
 
         public void Play()
         {
-            FlowNodeGraphContainer container = soundGetter.GetContainer(IXSoundsLibraryInstance.Get().ContainersParent);
-            graph = container.Get(soundGetter.GraphId, transform) as XSoundNodeGraph;
+            graph = soundGetter.GetGraph(transform) as XSoundNodeGraph;
+            graph.Flow();
             if (graph != null)
             {
                 playNode = graph.GetComponent<XSoundNodePlay>();

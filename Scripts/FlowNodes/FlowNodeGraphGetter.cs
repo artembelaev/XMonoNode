@@ -131,7 +131,8 @@ namespace XMonoNode
 
         private FlowNodeGraphContainer InstanciateContainer(FlowNodeGraphContainer loadedContainer)
         {
-            if (instances.TryGetValue(loadedContainer, out FlowNodeGraphContainer cachedContainer))
+            if (instances.TryGetValue(loadedContainer, out FlowNodeGraphContainer cachedContainer) &&
+                cachedContainer != null)
             {
                 return cachedContainer;
             }
@@ -139,7 +140,7 @@ namespace XMonoNode
             {
                 FlowNodeGraphContainer newContainer = GameObject.Instantiate(loadedContainer);
                 MonoBehaviour.DontDestroyOnLoad(newContainer.gameObject);
-                instances.Add(loadedContainer, newContainer);
+                instances[loadedContainer] = newContainer;
                 return newContainer;
             }
         }
@@ -291,7 +292,7 @@ namespace XMonoNode
             return graph;
         }
 
-        private FlowNodeGraph GetGraph(Transform graphParent = null)
+        public FlowNodeGraph GetGraph(Transform graphParent = null)
         {
             if (graph != null && graph.gameObject.activeInHierarchy && graph.FlowId == flowId)
             {
