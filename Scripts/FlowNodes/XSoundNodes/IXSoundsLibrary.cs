@@ -69,15 +69,15 @@ namespace XMonoNode
 
         public Dictionary<int, string> GetSounds();
 
-        //public Transform DisabledPoolRoot
-        //{
-        //    get;
-        //}
+        public Transform DisabledPoolRoot
+        {
+            get;
+        }
 
-        //public Transform ContainersParent
-        //{
-        //    get;
-        //}
+        public Transform ContainersParent
+        {
+            get;
+        }
     }
 
 

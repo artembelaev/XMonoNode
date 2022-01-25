@@ -84,6 +84,24 @@ namespace XMonoNode
             }
         }
 
+        public FlowNodeGraphContainer Container
+        {
+            get;
+            set;
+        } = null;
+
+        public string ContainerId
+        {
+            get;
+            set;
+        } = "";
+
+        public long FlowId
+        {
+            get;
+            set;
+        } = 0;
+
         private Dictionary<string, object> outputFlowParametersDict = new Dictionary<string, object>();
 
         private void Reset()

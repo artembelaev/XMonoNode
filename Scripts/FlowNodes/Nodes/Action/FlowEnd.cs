@@ -10,13 +10,6 @@ namespace XMonoNode
     [NodeWidth(130)]
     public class FlowEnd : FlowNodeIn
     {
-        [InlineEnd]
-        /// <summary>
-        /// Deletes the graph
-        /// </summary>
-        [Input(connectionType: ConnectionType.Override)]
-        public bool deleteGraph = false;
-
         public System.Action<string> Action
         {
             get;
@@ -35,9 +28,10 @@ namespace XMonoNode
             {
                 Action.Invoke(flowGraph != null ? flowGraph.State : "");
             }
-            if (GetInputValue(nameof(deleteGraph), deleteGraph))
+            if (flowGraph != null && flowGraph.Container != null)
             {
-                flowGraph.DestroySelf();
+
+                flowGraph.Container.PutIntoPool(flowGraph);
             }
         }
 

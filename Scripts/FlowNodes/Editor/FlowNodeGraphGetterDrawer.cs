@@ -95,16 +95,22 @@ namespace FlowNodesEditor
                 position.width = playButtonWidth;
                 if (GUI.Button(position, new GUIContent(">", "Play")))
                 {
+                    Transform graphParent = null;
                     EditorGUIUtility.PingObject(container.GetPrefab(id));
                     if (property.serializedObject.targetObject is Component)
                     {
                         Transform parent = (property.serializedObject.targetObject as Component).transform;
                         if (!EditorUtility.IsPersistent(parent.gameObject))
                         {
-                            container.GraphParent = parent;
+                            graphParent = parent;
                         } 
                     }
-                    container.Flow(id);
+                    container.StopAll();
+                    FlowNodeGraph graph = container.Get(id, graphParent);
+                    if (graph != null)
+                    {
+                        graph.Flow();
+                    }
                 }
 
                 position.x += position.width;
@@ -128,7 +134,7 @@ namespace FlowNodesEditor
 
         private string[] GetGraphIds(string containerFullName, out FlowNodeGraphContainer container)
         {
-            container = Resources.Load<FlowNodeGraphContainer>(containerFullName);
+            container = ResourcesLoader.Load<FlowNodeGraphContainer>(containerFullName);
             if (container == null)
             {
                 //Debug.LogError("Container is null! " + containerFullName);

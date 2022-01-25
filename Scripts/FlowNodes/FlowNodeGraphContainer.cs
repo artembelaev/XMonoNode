@@ -20,12 +20,10 @@ namespace XMonoNode
         }
 
         [SerializeField]
-        [Header("graph id")]
-        private string          id = "";
+        private string                  id = "";
 
         [SerializeField]
-        [Header("Graph prefab")]
-        private FlowNodeGraph   graph = null;
+        private FlowNodeGraph           graph = null;
 
         public string Id
         {
@@ -33,10 +31,11 @@ namespace XMonoNode
             set => id = value;
         }
 
+        public Object                   Prefab => graph;
 
-        public Object           Prefab => graph;
+        private Queue<FlowNodeGraph>    pool = new Queue<FlowNodeGraph>();
 
-        private FlowNodeGraph   instanciated = null;
+        private Queue<FlowNodeGraph>    allInstanciated = new Queue<FlowNodeGraph>();
 
         public FlowNodeGraph Get(Transform parent = null)
         {
@@ -44,6 +43,13 @@ namespace XMonoNode
             {
                 Debug.LogErrorFormat("FlowNodeGraphContainer: graph not set to Id: \"{0}\"", id);
                 return null;
+            }
+
+            FlowNodeGraph instanciated = null;
+
+            if (pool.Count > 0)
+            {
+                instanciated = pool.Dequeue();
             }
 
             if (instanciated == null)
@@ -63,6 +69,7 @@ namespace XMonoNode
                 }
 
                 instanciated.name = $"(Node Graph id=\"{id}\")";
+                allInstanciated.Enqueue(instanciated);
 #endif
             }
 
@@ -74,9 +81,28 @@ namespace XMonoNode
             return instanciated;
         }
 
+        public void PutIntoPool(FlowNodeGraph graph, Transform poolRoot)
+        {
+            Debug.Log(graph.name + " " + poolRoot);
+            pool.Enqueue(graph);
+            graph.transform.SetParent(poolRoot);
+        }
+
         public void SetGraphPrefab(FlowNodeGraph graph)
         {
             this.graph = graph;
+        }
+
+        public void StopAll()
+        {
+            foreach (FlowNodeGraph graph in allInstanciated)
+            {
+                if (graph != null && graph.gameObject.activeInHierarchy && graph.Container != null)
+                {
+                    graph.Stop();
+                    PutIntoPool(graph, graph.Container.PoolRoot);
+                }
+            }
         }
     }
 
@@ -91,16 +117,11 @@ namespace XMonoNode
         [SerializeField]
         private List<FlowNodeGraphContainerItem>                itemsList = null;
 
+        private Transform                                       poolRoot = null;
+
         public bool IsStatic => isStatic;
 
         public List<FlowNodeGraphContainerItem>                 ItemsList => itemsList;
-
-        public Transform GraphParent
-        {
-            get;
-            set;
-        } = null;
-
 
         private Dictionary<string, FlowNodeGraphContainerItem>  items = null;
         private Dictionary<string, FlowNodeGraphContainerItem>  Items
@@ -119,68 +140,38 @@ namespace XMonoNode
             }
         }
 
-        private List<FlowNodeGraph>         instanciated = new List<FlowNodeGraph>();
-
-        public FlowNodeGraph Flow(string id, params object[] parameters)
-        {
-            FlowNodeGraph graph = Get(id, GraphParent);
-            if (graph != null)
-            {
-                graph.Flow(parameters);
-            }
-            return graph;
-        }
-
-        public FlowNodeGraph Flow(string id, System.Action<string> onEndAction, string state, params object[] parameters)
-        {
-            FlowNodeGraph graph = Get(id, GraphParent);
-            if (graph != null)
-            {
-                graph.Flow(onEndAction, state, parameters);
-            }
-            return graph;
-        }
-
-        public FlowNodeGraph Flow(string id, Dictionary<string, object> parameters)
-        {
-            FlowNodeGraph graph = Get(id, GraphParent);
-            if (graph != null)
-            {
-                graph.Flow(parameters);
-            }
-            return graph;
-        }
-
-        public FlowNodeGraph Flow(string id, System.Action<string> onEndAction, string state, Dictionary<string, object> parameters)
-        {
-            FlowNodeGraph graph = Get(id, GraphParent);
-            if (graph != null)
-            {
-                graph.Flow(onEndAction, state, parameters);
-            }
-            return graph;
-        }
-
-        public virtual FlowNodeGraph CustomEvent(string id, string eventName, Transform parent = null)
-        {
-            FlowNodeGraph graph = Get(id, parent);
-            if (graph != null)
-            {
-                graph.CustomEvent(eventName);
-            }
-            return graph;
-        }
+        public Transform PoolRoot => poolRoot;
 
         public FlowNodeGraph Get(string id, Transform parent = null)
         {
+            Debug.Log(id);
             if (Items.TryGetValue(id, out FlowNodeGraphContainerItem item))
             {
-                return item.Get(parent);
+                FlowNodeGraph graph = item.Get(parent);
+                if (graph != null)
+                {
+                    graph.Container = this;
+                    graph.ContainerId = id;
+                }
+                return graph;
             }
             else
             {
                 Debug.LogErrorFormat("FlowNode Graph Container {0} hasn't Id \"{1}\"", name, id);
                 return null;
+            }
+        }
+
+        public void PutIntoPool(FlowNodeGraph graph)
+        {
+            if (graph == null)
+            {
+                return;
+            }
+
+            if (Items.TryGetValue(graph.ContainerId, out FlowNodeGraphContainerItem item))
+            {
+                item.PutIntoPool(graph, poolRoot);
             }
         }
 
@@ -196,51 +187,37 @@ namespace XMonoNode
             }
         }
 
-
-        public void UpdateInputParameters(string id, Transform transform, params object[] parameters)
+        public void Stop(FlowNodeGraph graph)
         {
-            FlowNodeGraph graph = Get(id, transform);
-            if (graph != null)
-            {
-                graph.UpdateInputParameters(parameters);
-            }
-        }
-
-        public void UpdateInputParameters(string id, Dictionary<string, object> parameters)
-        {
-            FlowNodeGraph graph = Get(id);
-            if (graph != null)
-            {
-                graph.UpdateInputParameters(parameters);
-            }
-        }
-
-        public void GetOutputParameters(string id, out Dictionary<string, object> parameters)
-        {
-            FlowNodeGraph graph = Get(id);
-            if (graph != null)
-            {
-                graph.GetOutputParameters(out parameters);
-            }
-            else
-            {
-                parameters = new Dictionary<string, object>();
-            }
-        }
-
-        public void Stop(string id)
-        {
-            FlowNodeGraph graph = Get(id);
             if (graph != null)
             {
                 graph.Stop();
+                PutIntoPool(graph);
             }
         }
 
         public void StopAll()
         {
-            itemsList.ForEach(item => item.Get()?.Stop());
+            itemsList.ForEach(item => item.StopAll());
         }
 
+        private void Start()
+        {
+            CreatePoolRoot();
+        }
+
+        public void CreatePoolRoot()
+        {
+            Debug.Log(gameObject.name);
+            poolRoot = new GameObject("pool").transform;
+#if UNITY_EDITOR
+            if (Application.isEditor)
+            {
+                poolRoot.gameObject.hideFlags = HideFlags.DontSave;
+            }
+#endif
+            poolRoot.SetParent(transform);
+            poolRoot.gameObject.SetActive(false);
+        }
     }
 }

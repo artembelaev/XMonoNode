@@ -29,5 +29,10 @@ namespace XMonoNode
         {
            // throw new System.NotImplementedException();
         }
+
+        protected override Transform GetContainerParent()
+        {
+            return IXSoundsLibraryInstance.Get().ContainersParent;
+        }
     }
 }

@@ -19,20 +19,18 @@ namespace XMonoNode
         private string          pathToContainers = "";
         [SerializeField]
         private string          containerFileName = "";
-        
 
         [SerializeField]
         protected bool          drawPathToContainers = true;
 
         public string GraphId => graphId;
 
-        // alternative usage - link to prefab directly
-        [SerializeField]
-        private FlowNodeGraph   graphPrefab = null;
+
+        private FlowNodeGraph   graph = null;
 
         public bool IsEmpty
         {
-            get => (string.IsNullOrEmpty(containerFileName) || containerFileName == NO_CONTAINER) ? graphPrefab == null : (string.IsNullOrEmpty(graphId) || string.IsNullOrEmpty(FullPath));
+            get => string.IsNullOrEmpty(graphId) || string.IsNullOrEmpty(FullPath);
         }
 
         public string PathToContainers
@@ -90,61 +88,59 @@ namespace XMonoNode
             this.graphId = graphId;
         }
 
-        public FlowNodeGraphGetter(FlowNodeGraph graphPrefab)
-        {
-            this.graphPrefab = graphPrefab;
-        }
-
         private FlowNodeGraphContainer instanciatedContainer = null;
 
+        private static Dictionary<FlowNodeGraphContainer, FlowNodeGraphContainer> instances = new Dictionary<FlowNodeGraphContainer, FlowNodeGraphContainer>();
 
+        protected virtual Transform GetContainerParent()
+        {
+            return null;
+        }
 
         public FlowNodeGraphContainer GetContainer(Transform parent = null)
         {
             if (instanciatedContainer == null)
             {
-                var resourceContainer = ResourcesLoader.Load<FlowNodeGraphContainer>(FullPath);
-                if (resourceContainer != null)
+                FlowNodeGraphContainer loadedContainer = ResourcesLoader.Load<FlowNodeGraphContainer>(FullPath);
+                if (loadedContainer != null)
                 {
-                    if (Application.isPlaying && !resourceContainer.IsStatic)
-                    {
-                        instanciatedContainer = InstanciateContainer(parent, resourceContainer);
+                    instanciatedContainer = InstanciateContainer(loadedContainer);
 #if UNITY_EDITOR
-                        if (Application.isEditor)
-                        {
-                            instanciatedContainer.gameObject.hideFlags = HideFlags.HideAndDontSave;
-                        }
-#endif
-                    }
-                    else
+                    if (Application.isEditor)
                     {
-                        instanciatedContainer = resourceContainer;
+                        instanciatedContainer.gameObject.hideFlags = HideFlags.DontSave;
+                        if (!Application.isPlaying)
+                        {
+                            instanciatedContainer.CreatePoolRoot();
+                        }
                     }
+#endif
+                    if (parent == null)
+                    {
+                        parent = GetContainerParent();
+                    }
+                    if (parent != null)
+                    {
+                        instanciatedContainer.transform.SetParent(parent);
+                    }
+                    instanciatedContainer.transform.localPosition = Vector3.zero;
                 }
             }
             return instanciatedContainer;
         }
 
-        private FlowNodeGraphContainer InstanciateContainer(Transform parent, FlowNodeGraphContainer res)
+        private FlowNodeGraphContainer InstanciateContainer(FlowNodeGraphContainer loadedContainer)
         {
-            FlowNodeGraphContainer result = null;
-            if (res.IsStatic)
+            if (instances.TryGetValue(loadedContainer, out FlowNodeGraphContainer cachedContainer))
             {
-
+                return cachedContainer;
             }
             else
             {
-                if (parent != null)
-                {
-                    result = GameObject.Instantiate(res, parent);
-                    result.transform.localPosition = Vector3.zero;
-                }
-                else
-                {
-                    result = GameObject.Instantiate(res);
-                }
+                FlowNodeGraphContainer newContainer = GameObject.Instantiate(loadedContainer);
+                instances.Add(loadedContainer, newContainer);
+                return newContainer;
             }
-            return result;
         }
 
         protected bool CheckContainer()
@@ -159,102 +155,102 @@ namespace XMonoNode
 
         public void Flow(System.Action<string> onEndAction, string state, params object[] parameters)
         {
-            if (CheckContainer())
+            graph = GetGraph(parameters.Get<Transform>());
+            if (graph != null)
             {
-                FlowNodeGraphContainer container = GetContainer();
-                container.GraphParent = parameters.Get<Transform>();
-                container.Flow(graphId, onEndAction, state, parameters);
+                graph.Flow(onEndAction, state, parameters);
             }
         }
 
         public void Flow(Transform parent, Dictionary<string, object> parameters)
         {
-            if (CheckContainer())
+            graph = GetGraph(parent);
+            if (graph != null)
             {
-                FlowNodeGraphContainer container = GetContainer();
-                container.GraphParent = parent;
-                container.Flow(graphId, parameters);
+                graph.Flow(parameters);
             }
         }
 
         public void Flow(Transform parent, System.Action<string> onEndAction, string state, Dictionary<string, object> parameters)
         {
-            if (CheckContainer())
+            graph = GetGraph(parent);
+            if (graph != null)
             {
-                FlowNodeGraphContainer container = GetContainer();
-                container.GraphParent = parent;
-                container.Flow(graphId, onEndAction, state, parameters);
+                graph.Flow(onEndAction, state, parameters);
             }
         }
 
         public void Flow(params object[] parameters)
         {
-            if (CheckContainer())
+            graph = GetGraph(parameters.Get<Transform>());
+            if (graph != null)
             {
-                FlowNodeGraphContainer container = GetContainer();
-                container.GraphParent = parameters.Get<Transform>();
-                container.Flow(graphId, parameters);
+                graph.Flow(parameters);
             }
         }
 
         public void Flow(Dictionary<string, object> parameters)
         {
-            if (CheckContainer())
+            graph = GetGraph();
+            if (graph != null)
             {
-                GetContainer().Flow(graphId, parameters);
+                graph.Flow(graphId, parameters);
             }
         }
 
         public void Flow(System.Action<string> onEndAction, string state, Dictionary<string, object> parameters)
         {
-            if (CheckContainer())
+            graph = GetGraphFromPool();
+            if (graph != null)
             {
-                GetContainer().Flow(graphId, onEndAction, state, parameters);
+                graph.Flow(graphId, onEndAction, state, parameters);
             }
         }
 
         public void CustomEvent(string eventName)
         {
-            if (CheckContainer())
+            graph = GetGraph();
+            if (graph != null)
             {
-                GetContainer().CustomEvent(graphId, eventName);
+                graph.CustomEvent(eventName);
             }
         }
 
         public void UpdateInputParameters(Transform parent = null, params object[] parameters)
         {
-            if (CheckContainer())
+            graph = GetGraph(parent);
+            if (graph != null)
             {
-                FlowNodeGraphContainer container = GetContainer();
-                container.GraphParent = parent;
-                container.UpdateInputParameters(graphId, parent, parameters);
+                graph.UpdateInputParameters(parameters);
             }
         }
 
         [Obsolete]
         public void UpdateInputParameters(params object[] parameters)
         {
-            if (CheckContainer())
+            Transform parent = parameters.Get<Transform>();
+            graph = GetGraph(parent);
+            if (graph != null)
             {
-                FlowNodeGraphContainer container = GetContainer();
-                container.GraphParent = parameters.Get<Transform>();
-                container.UpdateInputParameters(graphId, container.GraphParent, parameters);
+                graph.UpdateInputParameters(parameters);
             }
         }
 
         public void UpdateInputParameters(Dictionary<string, object> parameters)
         {
-            if (CheckContainer())
+            graph = GetGraph();
+            if (graph != null)
             {
-                GetContainer().UpdateInputParameters(graphId, parameters);
+                graph.UpdateInputParameters(parameters);
             }
         }
 
         public void GetOutputParameters(out Dictionary<string, object> parameters)
         {
-            if (CheckContainer())
+            graph = GetGraph();
+            if (graph != null)
             {
-                GetContainer().GetOutputParameters(graphId, out parameters);
+                graph.GetOutputParameters(out parameters);
             }
             else
             {
@@ -264,14 +260,54 @@ namespace XMonoNode
 
         public void Stop()
         {
-            if (GetContainer() == null)
+            graph = GetGraph();
+            if (graph != null)
             {
-                Debug.LogErrorFormat("Container is null, {0}", FullPath);
-                return;
+                GetContainer().Stop(graph);
+            }           
+        }
+
+        private FlowNodeGraph GetGraphFromPool(Transform graphParent = null)
+        {
+            if (CheckContainer())
+            {
+                FlowNodeGraphContainer container = GetContainer();
+                graph = container.Get(graphId, graphParent);
+                if (graph != null)
+                {
+                    graph.FlowId++;
+                    flowId = graph.FlowId;
+                    if (graph.transform.parent != graphParent)
+                    {
+                        graph.transform.SetParent(graphParent);
+                    }
+                }
+                else
+                {
+                    flowId = -1;
+                }
+            }
+            return graph;
+        }
+
+        private FlowNodeGraph GetGraph(Transform graphParent = null)
+        {
+            if (graph != null && graph.gameObject.activeInHierarchy && graph.FlowId == flowId)
+            {
+                if (graphParent != null && graph.transform.parent != graphParent)
+                {
+                    graph.transform.SetParent(graphParent);
+                }
+                return graph;
+            }
+            else
+            {
+                return GetGraphFromPool(graphParent);
             }
 
-            GetContainer().Stop(graphId);
         }
+
+        private long            flowId = -1;
 
     }
 

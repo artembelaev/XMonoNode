@@ -114,6 +114,14 @@ namespace XMonoNode
             }
         }
 
+        public Transform DisabledPoolRoot => poolRoot;
+
+        private Transform                       poolRoot = null;
+        public Transform ContainersParent => containersParent;
+
+        [SerializeField]
+        private Transform containersParent = null;
+
         private string GetName(AudioClip clip)
         {
             string name = clip.name;
@@ -212,6 +220,13 @@ namespace XMonoNode
             }
 
             return source;
+        }
+
+        private void Start()
+        {
+            poolRoot = new GameObject("pool").transform;
+            poolRoot.SetParent(transform);
+            poolRoot.gameObject.SetActive(false);
         }
     }
 }
