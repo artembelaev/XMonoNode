@@ -100,12 +100,9 @@ namespace XMonoNode
                     if (Application.isEditor)
                     {
                         instanciatedContainer.gameObject.hideFlags = HideFlags.DontSave;
-                        if (!Application.isPlaying)
-                        {
-                            instanciatedContainer.CreatePoolRoot();
-                        }
                     }
 #endif
+                    instanciatedContainer.CreatePoolRoot();
                     if (parent == null)
                     {
                         parent = GetContainerParent();

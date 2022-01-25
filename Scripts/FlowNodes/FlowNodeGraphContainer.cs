@@ -194,7 +194,7 @@ namespace XMonoNode
             itemsList.ForEach(item => item.StopAll());
         }
 
-        private void Start()
+        private void Awake()
         {
             CreatePoolRoot();
         }
