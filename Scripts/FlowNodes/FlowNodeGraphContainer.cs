@@ -54,14 +54,9 @@ namespace XMonoNode
 
             if (instanciated == null)
             {
-                if (parent == null)
-                {
-                    instanciated = GameObject.Instantiate(graph);
-                }
-                else
-                {
-                    instanciated = GameObject.Instantiate(graph, parent);
-                }
+
+                instanciated = GameObject.Instantiate(graph);
+
                 MonoBehaviour.DontDestroyOnLoad(instanciated.gameObject);
                 allInstanciated.Enqueue(instanciated);
 
@@ -75,10 +70,8 @@ namespace XMonoNode
 
             }
 
-            if (parent != null)
-            {
-                instanciated.transform.parent = parent;
-            }
+
+            instanciated.transform.SetParent(parent);
             instanciated.transform.localPosition = Vector3.zero;
             return instanciated;
         }

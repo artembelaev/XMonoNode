@@ -182,6 +182,15 @@ namespace XMonoNode
             }
         }
 
+        public void Flow(Transform parent, System.Action<string> onEndAction, string state, params object[] parameters)
+        {
+            graph = GetGraph(parent);
+            if (graph != null)
+            {
+                graph.Flow(onEndAction, state, parameters);
+            }
+        }
+
         public void Flow(params object[] parameters)
         {
             graph = GetGraph(parameters.Get<Transform>());
