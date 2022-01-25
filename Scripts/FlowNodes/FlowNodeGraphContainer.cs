@@ -62,15 +62,17 @@ namespace XMonoNode
                 {
                     instanciated = GameObject.Instantiate(graph, parent);
                 }
+                MonoBehaviour.DontDestroyOnLoad(instanciated.gameObject);
+                allInstanciated.Enqueue(instanciated);
+
 #if UNITY_EDITOR
                 if (Application.isEditor)
                 {
                     instanciated.gameObject.hideFlags = HideFlags.DontSave;
                 }
-
                 instanciated.name = $"(Node Graph id=\"{id}\")";
-                allInstanciated.Enqueue(instanciated);
 #endif
+
             }
 
             if (parent != null)
@@ -83,7 +85,6 @@ namespace XMonoNode
 
         public void PutIntoPool(FlowNodeGraph graph, Transform poolRoot)
         {
-            Debug.Log(graph.name + " " + poolRoot);
             pool.Enqueue(graph);
             graph.transform.SetParent(poolRoot);
         }
@@ -144,7 +145,6 @@ namespace XMonoNode
 
         public FlowNodeGraph Get(string id, Transform parent = null)
         {
-            Debug.Log(id);
             if (Items.TryGetValue(id, out FlowNodeGraphContainerItem item))
             {
                 FlowNodeGraph graph = item.Get(parent);
@@ -208,7 +208,6 @@ namespace XMonoNode
 
         public void CreatePoolRoot()
         {
-            Debug.Log(gameObject.name);
             poolRoot = new GameObject("pool").transform;
 #if UNITY_EDITOR
             if (Application.isEditor)

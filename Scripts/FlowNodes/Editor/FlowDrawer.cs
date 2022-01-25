@@ -35,7 +35,6 @@ namespace XMonoNodeEditor
 
             if (port.direction == NodePort.IO.Output && NodeEditorUtilities.GetPortButtonPressed(port))
             {
-                Debug.Log(port.label);
                 FlowUtils.FlowOutput(port);
             }
         }

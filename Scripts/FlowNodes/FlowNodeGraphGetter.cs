@@ -138,6 +138,7 @@ namespace XMonoNode
             else
             {
                 FlowNodeGraphContainer newContainer = GameObject.Instantiate(loadedContainer);
+                MonoBehaviour.DontDestroyOnLoad(newContainer.gameObject);
                 instances.Add(loadedContainer, newContainer);
                 return newContainer;
             }

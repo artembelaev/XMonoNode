@@ -14,7 +14,6 @@ namespace XMonoNode
         public override void Flow(NodePort flowPort)
         {
             var spriteName = GetInputValue(nameof(SpriteName), SpriteName);
-            Debug.Log($"Loading from resources {spriteName.ToLower()}");
             Result = Resources.Load<Sprite>(spriteName.ToLower());
             FlowOut();
         }
