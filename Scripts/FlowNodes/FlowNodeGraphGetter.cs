@@ -202,7 +202,7 @@ namespace XMonoNode
 
         public void Flow(System.Action<string> onEndAction, string state, Dictionary<string, object> parameters)
         {
-            graph = GetGraphFromPool();
+            graph = GetGraph();
             if (graph != null)
             {
                 graph.Flow(graphId, onEndAction, state, parameters);
@@ -262,11 +262,11 @@ namespace XMonoNode
 
         public void Stop()
         {
-            graph = GetGraph();
-            if (graph != null)
+            if (!GraphIsFlowing())
             {
-                GetContainer().Stop(graph);
-            }           
+                return;
+            }
+            GetContainer().Stop(graph);
         }
 
         private FlowNodeGraph GetGraphFromPool(Transform graphParent = null)
@@ -294,7 +294,7 @@ namespace XMonoNode
 
         public FlowNodeGraph GetGraph(Transform graphParent = null)
         {
-            if (graph != null && graph.gameObject.activeInHierarchy && graph.FlowId == flowId)
+            if (GraphIsFlowing())
             {
                 if (graphParent != null && graph.transform.parent != graphParent)
                 {
@@ -307,6 +307,11 @@ namespace XMonoNode
                 return GetGraphFromPool(graphParent);
             }
 
+        }
+
+        private bool GraphIsFlowing()
+        {
+            return graph != null && graph.gameObject.activeInHierarchy && graph.FlowId == flowId;
         }
 
         private long            flowId = -1;
