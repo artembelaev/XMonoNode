@@ -34,6 +34,12 @@ namespace XMonoNode
 
         public int NodesCount => nodes.Length;
 
+        public bool CanUpdate
+        {
+            get;
+            set;
+        } = true;
+
         private void Update()
         {
             CustomUpdate();
@@ -44,8 +50,11 @@ namespace XMonoNode
             CustomFixedUpdate();
         }
 
-        public void CustomUpdate()
+        public virtual void CustomUpdate()
         {
+            if (!CanUpdate)
+                return;
+
             foreach (var node in nodes)
             {
                 node.CustomUpdate();
@@ -57,8 +66,11 @@ namespace XMonoNode
             }
         }
 
-        private void CustomFixedUpdate()
+        public virtual void CustomFixedUpdate()
         {
+            if (!CanUpdate)
+                return;
+
             foreach (var node in nodes)
             {
                 node.CustomFixedUpdate();

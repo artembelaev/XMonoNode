@@ -12,6 +12,9 @@ namespace XMonoNode
     [RequireComponent(/*typeof(OnFlowEventNode), */typeof(XSoundNodePlay)/*, typeof(FlowEnd)*/)]
     public class XSoundNodeGraph : FlowNodeGraph
     {
+        [SerializeField, Tooltip("Distance from Camera.main to this object at which the graph nodes is updated")]
+        private float                       maxListenerDistance = 150f;
+
         private void Reset()
         {
 #if UNITY_EDITOR
@@ -115,6 +118,27 @@ namespace XMonoNode
             else
             {
                 return GetComponents<XSoundNodePlay>();
+            }
+        }
+
+        private float ListenerDistance()
+        {
+            return (Camera.main.transform.position - transform.position).magnitude;
+        }
+
+        public override void CustomUpdate()
+        {
+            if (ListenerDistance() < maxListenerDistance)
+            {
+                base.CustomUpdate();
+            }
+        }
+
+        public override void CustomFixedUpdate()
+        {
+            if (ListenerDistance() < maxListenerDistance)
+            {
+                base.CustomFixedUpdate();
             }
         }
     }
