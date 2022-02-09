@@ -121,14 +121,14 @@ namespace XMonoNode
             }
         }
 
-        private float ListenerDistance()
+        private bool ListenerDistanceIsOk()
         {
-            return (Camera.main.transform.position - transform.position).magnitude;
+            return Camera.main == null || (Camera.main.transform.position - transform.position).magnitude < maxListenerDistance;
         }
 
         public override void CustomUpdate()
         {
-            if (ListenerDistance() < maxListenerDistance)
+            if (ListenerDistanceIsOk())
             {
                 base.CustomUpdate();
             }
@@ -136,7 +136,7 @@ namespace XMonoNode
 
         public override void CustomFixedUpdate()
         {
-            if (ListenerDistance() < maxListenerDistance)
+            if (ListenerDistanceIsOk())
             {
                 base.CustomFixedUpdate();
             }
