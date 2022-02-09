@@ -24,7 +24,7 @@ namespace XMonoNode
             get; set;
         }
 
-        private void Update()
+        public override void CustomUpdate()
         {
             if (Time.realtimeSinceStartup > _timestamp)
             {

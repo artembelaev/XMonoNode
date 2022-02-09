@@ -57,23 +57,7 @@ namespace XMonoNode
             FlowOut();
         }
 
-        private void Update()
-        {
-            if (graph.UpdateMode == AnimatorUpdateMode.AnimatePhysics)
-                return;
-
-            ConditionalUpdate();
-        }
-
-        private void FixedUpdate()
-        {
-            if (graph.UpdateMode != AnimatorUpdateMode.AnimatePhysics)
-                return;
-
-            ConditionalUpdate();
-        }
-
-        private void ConditionalUpdate()
+        public override void ConditionalUpdate()
         {
             Default = DefaultPort.GetInputValue(Default);
             input = inputPort.GetInputValue(input);

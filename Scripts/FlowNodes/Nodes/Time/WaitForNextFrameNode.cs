@@ -30,7 +30,7 @@ namespace XMonoNode
             }
         }
 
-        private void Update()
+        public override void CustomUpdate()
         {
             if (flowUpdateNumber == Time.frameCount)
             {

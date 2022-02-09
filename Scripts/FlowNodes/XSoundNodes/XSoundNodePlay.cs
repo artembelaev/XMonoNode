@@ -89,7 +89,7 @@ namespace XMonoNode
             
         }
 
-        private void Update()
+        public override void CustomUpdate()
         {
             if (SourcesIsPlaying) // зук проигрывается сейчас
             {

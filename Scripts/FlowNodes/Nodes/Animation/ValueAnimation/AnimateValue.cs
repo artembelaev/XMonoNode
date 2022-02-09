@@ -124,23 +124,9 @@ namespace XMonoNode
             StopTimer();
         }
 
-        private void Update()
+        public override void ConditionalUpdate()
         {
-            if (graph.UpdateMode == AnimatorUpdateMode.AnimatePhysics)
-                return;
-
             if (state == State.Started)
-            {
-                TickTimer();
-            }
-        }
-
-        private void FixedUpdate()
-        {
-            if (graph.UpdateMode != AnimatorUpdateMode.AnimatePhysics)
-                return;
-
-            if (state != State.Started)
             {
                 TickTimer();
             }

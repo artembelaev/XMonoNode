@@ -34,6 +34,50 @@ namespace XMonoNode
 
         public int NodesCount => nodes.Length;
 
+        private void Update()
+        {
+            CustomUpdate();
+        }
+
+        private void FixedUpdate()
+        {
+            CustomFixedUpdate();
+        }
+
+        public void CustomUpdate()
+        {
+            foreach (var node in nodes)
+            {
+                node.CustomUpdate();
+            }
+
+            if (UpdateMode != AnimatorUpdateMode.AnimatePhysics)
+            {
+                ConditionalUpdate();
+            }
+        }
+
+        private void CustomFixedUpdate()
+        {
+            foreach (var node in nodes)
+            {
+                node.CustomFixedUpdate();
+            }
+
+            if (UpdateMode == AnimatorUpdateMode.AnimatePhysics)
+            {
+                ConditionalUpdate();
+            }
+        }
+
+        private void ConditionalUpdate()
+        {
+            foreach (var node in nodes)
+            {
+                node.ConditionalUpdate();
+            }
+        }
+
         public INode[] GetNodes()
         {
             var result = new INode[nodes.Length];
@@ -325,5 +369,6 @@ namespace XMonoNode
         {
             return typeof(MonoNode);
         }
+
     }
 }

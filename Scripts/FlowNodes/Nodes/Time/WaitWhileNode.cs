@@ -14,10 +14,10 @@ namespace XMonoNode
         public override void Flow(NodePort flowPort)
         {
             triggered = true;
-            Update();
+            CustomUpdate();
         }
 
-        private void Update()
+        public override void CustomUpdate()
         {
             if (triggered && !Condition)
             {

@@ -165,6 +165,30 @@ namespace XMonoNode {
 #endif
         }
 
+        /// <summary>
+        /// Uses Instead of Unity Update
+        /// </summary>
+        public virtual void CustomUpdate()
+        {
+
+        }
+
+        /// <summary>
+        /// Uses Instead of Unity FixedUpdate
+        /// </summary>
+        public virtual void CustomFixedUpdate()
+        {
+
+        }
+
+        /// <summary>
+        /// Uses Instead of Unity Update or FixedUpdate (defines by graph Update Mode setting)
+        /// </summary>
+        public virtual void ConditionalUpdate()
+        {
+
+        }
+
         /// <summary> Initialize node. Called on creation. </summary>
         protected virtual void Init() { }
 
