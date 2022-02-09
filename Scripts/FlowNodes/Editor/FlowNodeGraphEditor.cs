@@ -157,7 +157,7 @@ namespace FlowNodesEditor
     /// <summary>
     /// Инспектор графа. Добавляет кнопки execute, stop и т.д..
     /// </summary>
-    [CustomEditor(typeof(FlowNodeGraph), true)]
+    [CustomEditor(typeof(FlowNodeGraph), true), CanEditMultipleObjects]
     public class FlowNodeGraphInspector : MonoNodeInspector
     {
         private FlowNodeGraph flowNodeGraph = null;

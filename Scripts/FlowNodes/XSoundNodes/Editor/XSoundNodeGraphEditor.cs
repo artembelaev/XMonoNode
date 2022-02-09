@@ -87,7 +87,7 @@ namespace XMonoNode
     /// <summary>
     /// Инспектор звукового графа. Добавляет кнопки play, stop и т.д..
     /// </summary>
-    [CustomEditor(typeof(XSoundNodeGraph), true)]
+    [CustomEditor(typeof(XSoundNodeGraph), true), CanEditMultipleObjects]
     public class XSoundNodeGraphInspector : FlowNodeGraphInspector
     {
         private XSoundNodeGraph soundNodeGraph = null;

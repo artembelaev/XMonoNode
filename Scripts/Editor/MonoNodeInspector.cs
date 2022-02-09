@@ -4,7 +4,7 @@ using System;
 using XMonoNode;
 
 namespace XMonoNodeEditor {
-    [UnityEditor.CustomEditor(typeof(MonoNodeGraph), true)]
+    [UnityEditor.CustomEditor(typeof(MonoNodeGraph), true), CanEditMultipleObjects]
     public class MonoNodeInspector : Editor
     {
         public MonoNodeGraph MonoGraph => target as MonoNodeGraph;
