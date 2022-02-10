@@ -15,6 +15,24 @@ namespace XMonoNode
         [SerializeField, Tooltip("Distance from Camera.main to this object at which the graph nodes is updated")]
         private float                       maxListenerDistance = 150f;
 
+        private float maxListenerDistanceSqr = 0f;
+        private Transform listenerTransform = null;
+
+        private void Start()
+        {
+            maxListenerDistanceSqr = maxListenerDistance * maxListenerDistance;
+            InitCamera();
+        }
+
+        private void InitCamera()
+        {
+            Camera mainCamera = Camera.main;
+            if (mainCamera != null)
+            {
+                listenerTransform = mainCamera.transform;
+            }
+        }
+
         private void Reset()
         {
 #if UNITY_EDITOR
@@ -121,14 +139,19 @@ namespace XMonoNode
             }
         }
 
-        private bool ListenerDistanceIsOk()
+        private bool Check()
         {
-            return Camera.main == null || (Camera.main.transform.position - transform.position).magnitude < maxListenerDistance;
+            if (listenerTransform == null)
+            {
+                InitCamera();
+            }
+
+            return listenerTransform == null || (listenerTransform.position - transform.position).sqrMagnitude<maxListenerDistanceSqr;
         }
 
-        public override void CustomUpdate()
+    public override void CustomUpdate()
         {
-            if (ListenerDistanceIsOk())
+            if (Check())
             {
                 base.CustomUpdate();
             }
@@ -136,7 +159,7 @@ namespace XMonoNode
 
         public override void CustomFixedUpdate()
         {
-            if (ListenerDistanceIsOk())
+            if (Check())
             {
                 base.CustomFixedUpdate();
             }
