@@ -14,7 +14,7 @@ namespace XMonoNode
     public class FloatCurve : MonoNode
     {
         [Inline]
-        [Input, HideLabel]
+        [Input(connectionType: ConnectionType.Override), HideLabel]
         public float            input = 0.0f;
         [Output, HideLabel]
         public float            output;

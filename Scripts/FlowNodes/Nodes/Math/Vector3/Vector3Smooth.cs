@@ -52,18 +52,17 @@ namespace XMonoNode
 
         public override void Flow(NodePort flowPort)
         {
-            smooth = Default;
+            smooth = DefaultPort.GetInputValue(Default);
             FlowOut();
         }
 
         public override void ConditionalUpdate()
         {
-            Default = DefaultPort.GetInputValue(Default);
             input = inputPort.GetInputValue(input);
-            lerpCoef = lerpCoefPort.GetInputValue(lerpCoef);
 
             if (!Mathf.Approximately(Vector3.Distance(smooth, input), 0))
             {
+                lerpCoef = lerpCoefPort.GetInputValue(lerpCoef);
                 smooth = Vector3.Lerp(smooth, input, graph.DeltaTime * lerpCoef);
             }
         }

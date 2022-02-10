@@ -21,6 +21,9 @@ namespace XMonoNode
         public float            input = 0.0f;
         [Output]
         public float            lerpOutput = 0.0f;
+
+        [SerializeField, Hiding]
+        private float           inputDelta = -0.01f;
         
 
         [Input(connectionType: ConnectionType.Override)]
@@ -59,19 +62,19 @@ namespace XMonoNode
 
         public override void Flow(NodePort flowPort)
         {
-            lerpOutput = Default;
+            lerpOutput = DefaultPort.GetInputValue(Default);
             FlowOut();
         }
 
         public override void ConditionalUpdate()
         {
-            Default = DefaultPort.GetInputValue(Default);
             input = inputPort.GetInputValue(input);
-            lerpUp = lerpUpPort.GetInputValue(lerpUp);
-            lerpDown = lerpDownPort.GetInputValue(lerpDown);
 
-            if (!Mathf.Approximately(lerpOutput, input))
+            if (inputDelta < 0f && !Mathf.Approximately(lerpOutput, input) ||
+                Mathf.Abs(lerpOutput - input) < inputDelta)
             {
+                lerpUp = lerpUpPort.GetInputValue(lerpUp);
+                lerpDown = lerpDownPort.GetInputValue(lerpDown);
                 lerpOutput = Mathf.Lerp(lerpOutput, input, graph.DeltaTime * (input > lerpOutput ? lerpUp : lerpDown));
             }
         }
