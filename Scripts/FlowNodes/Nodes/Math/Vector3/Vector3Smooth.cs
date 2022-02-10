@@ -10,7 +10,7 @@ namespace XMonoNode
     /// </summary>
     [CreateNodeMenu("Vector3/Smooth", 31)]
     //[ExecuteInEditMode]
-    public class Vector3Smooth : FlowNodeInOut
+    public class Vector3Smooth : FlowNodeInOut, IUpdatable
     {
         [Input(connectionType: ConnectionType.Override)]
         public Vector3          Default = Vector3.zero;
@@ -56,14 +56,14 @@ namespace XMonoNode
             FlowOut();
         }
 
-        public override void ConditionalUpdate()
+        public virtual void OnUpdate(float deltaTime)
         {
             input = inputPort.GetInputValue(input);
 
             if (!Mathf.Approximately(Vector3.Distance(smooth, input), 0))
             {
                 lerpCoef = lerpCoefPort.GetInputValue(lerpCoef);
-                smooth = Vector3.Lerp(smooth, input, graph.DeltaTime * lerpCoef);
+                smooth = Vector3.Lerp(smooth, input, deltaTime * lerpCoef);
             }
         }
 

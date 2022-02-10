@@ -2,7 +2,7 @@
 
 namespace XMonoNode
 {
-    public abstract class TweenNode : FlowNodeInOut
+    public abstract class TweenNode : FlowNodeInOut, IUpdatable
     {
         public enum LoopType
         {
@@ -78,11 +78,11 @@ namespace XMonoNode
             }
         }
 
-        public override void ConditionalUpdate()
+        public void OnUpdate(float deltaTime)
         {
             if (state != State.Stopped)
             {
-                TickTimer();
+                TickTimer(deltaTime);
             }
         }
 
@@ -105,17 +105,17 @@ namespace XMonoNode
             {
                 _state = State.Started;
                 OnTweenStart();
-                TickTimer();
+                TickTimer(graph.DeltaTime);
 
                 FlowUtils.FlowOutput(onStartPort);
             }
         }
 
-        private void TickTimer()
+        private void TickTimer(float deltaTime)
         {
             if (state == State.Wait)
             {
-                waitRemainingSec -= graph.DeltaTime;
+                waitRemainingSec -= deltaTime;
                 if (waitRemainingSec <= 0.0f)
                 {
                     _state = State.Started;
@@ -156,7 +156,7 @@ namespace XMonoNode
                         OnNextLoop(loop);
                     }
                 }
-                remainingSec -= graph.DeltaTime;
+                remainingSec -= deltaTime;
 
 
             }

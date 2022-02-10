@@ -7,7 +7,7 @@ namespace XMonoNode
     [NodeWidth(150)]
     public class OnFixedUpdate : EventNode
     {
-        public override void CustomFixedUpdate()
+        private void FixedUpdate()
         {
             TriggerFlow();
         }

@@ -13,9 +13,4 @@ public class #SCRIPTNAME# : MonoNodeGraph
         #NOTRIM#
     }
     
-    public override void ConditionalUpdate()
-    {
-        base.ConditionalUpdate()
-        #NOTRIM#
-    }
 }

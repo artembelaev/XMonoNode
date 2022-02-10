@@ -4,7 +4,7 @@ using UnityEngine;
 namespace XMonoNode
 {
     [CreateNodeMenu("Time/Wait Until", 533)]
-    public class WaitUntilNode : WaitBase
+    public class WaitUntilNode : WaitBase, IUpdatable
     {
         private void Reset()
         {
@@ -14,10 +14,10 @@ namespace XMonoNode
         public override void Flow(NodePort flowPort)
         {
             triggered = true;
-            CustomUpdate();
+            OnUpdate(graph.DeltaTime);
         }
 
-        public override void CustomUpdate()
+        public void OnUpdate(float deltaTime)
         {
             if (triggered && Condition)
             {

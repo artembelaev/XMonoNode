@@ -10,7 +10,7 @@ namespace XMonoNode
     /// </summary>
     [CreateNodeMenu("Float/Smooth", -163)]
     [NodeWidth(190)]
-    public class FloatSmooth : FlowNodeInOut
+    public class FloatSmooth : FlowNodeInOut, IUpdatable
     {
 
         [Input(connectionType: ConnectionType.Override)]
@@ -66,7 +66,7 @@ namespace XMonoNode
             FlowOut();
         }
 
-        public override void ConditionalUpdate()
+        public virtual void OnUpdate(float deltaTime)
         {
             input = inputPort.GetInputValue(input);
 
@@ -75,7 +75,7 @@ namespace XMonoNode
             {
                 lerpUp = lerpUpPort.GetInputValue(lerpUp);
                 lerpDown = lerpDownPort.GetInputValue(lerpDown);
-                lerpOutput = Mathf.Lerp(lerpOutput, input, graph.DeltaTime * (input > lerpOutput ? lerpUp : lerpDown));
+                lerpOutput = Mathf.Lerp(lerpOutput, input, deltaTime * (input > lerpOutput ? lerpUp : lerpDown));
             }
         }
 

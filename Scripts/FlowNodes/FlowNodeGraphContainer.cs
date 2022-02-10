@@ -78,6 +78,7 @@ namespace XMonoNode
 
         public void PutIntoPool(FlowNodeGraph graph, Transform poolRoot)
         {
+            graph.Stop();
             pool.Enqueue(graph);
             graph.transform.SetParent(poolRoot);
         }
@@ -93,7 +94,6 @@ namespace XMonoNode
             {
                 if (graph != null && graph.gameObject.activeInHierarchy && graph.Container != null)
                 {
-                    graph.Stop();
                     PutIntoPool(graph, graph.Container.PoolRoot);
                 }
             }
@@ -184,7 +184,6 @@ namespace XMonoNode
         {
             if (graph != null)
             {
-                graph.Stop();
                 PutIntoPool(graph);
             }
         }

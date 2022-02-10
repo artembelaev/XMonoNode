@@ -24,9 +24,4 @@ public class #SCRIPTNAME# : MonoNode
         #NOTRIM#
     }
     
-    public override void ConditionalUpdate()
-    {
-        base.ConditionalUpdate()
-        #NOTRIM#
-    }
 }

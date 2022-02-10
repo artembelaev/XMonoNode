@@ -32,6 +32,8 @@ namespace XMonoNode
         /// See: <see cref="AddNode{T}"/> </summary>
         [SerializeField, HideInInspector] public MonoNode[] nodes = new MonoNode[0];
 
+        private IUpdatable[]                                updatableNodes = new IUpdatable[0];
+
         public int NodesCount => nodes.Length;
 
         public bool CanUpdate
@@ -42,51 +44,33 @@ namespace XMonoNode
 
         private void Update()
         {
-            CustomUpdate();
+            if (UpdateMode != AnimatorUpdateMode.AnimatePhysics)
+            {
+                OnUpdate(DeltaTime);
+            }
         }
 
         private void FixedUpdate()
         {
-            CustomFixedUpdate();
-        }
-
-        public virtual void CustomUpdate()
-        {
-            if (!CanUpdate)
-                return;
-
-            foreach (var node in nodes)
-            {
-                node.CustomUpdate();
-            }
-
-            if (UpdateMode != AnimatorUpdateMode.AnimatePhysics)
-            {
-                ConditionalUpdate();
-            }
-        }
-
-        public virtual void CustomFixedUpdate()
-        {
-            if (!CanUpdate)
-                return;
-
-            foreach (var node in nodes)
-            {
-                node.CustomFixedUpdate();
-            }
-
             if (UpdateMode == AnimatorUpdateMode.AnimatePhysics)
             {
-                ConditionalUpdate();
+                OnUpdate(DeltaTime);
             }
         }
 
-        private void ConditionalUpdate()
+        private void Awake()
         {
-            foreach (var node in nodes)
+            updateUpdatableNodesArray();
+        }
+
+        protected virtual void OnUpdate(float deltaTime)
+        {
+            if (!CanUpdate)
+                return;
+
+            foreach (var updatableNode in updatableNodes)
             {
-                node.ConditionalUpdate();
+                updatableNode.OnUpdate(deltaTime);
             }
         }
 
@@ -128,6 +112,8 @@ namespace XMonoNode
             var nodesList = new List<MonoNode>(nodes);
             nodesList.Add(node);
             nodes = nodesList.ToArray();
+
+            updateUpdatableNodesArray();
             return node;
         }
 
@@ -300,7 +286,27 @@ namespace XMonoNode
             var nodesList = new List<MonoNode>(nodes);
             nodesList.Add(node);
             nodes = nodesList.ToArray();
+            
+            updateUpdatableNodesArray();
             return node;
+        }
+
+        private void updateUpdatableNodesArray()
+        {
+            updatableNodes = GetComponents<IUpdatable>();
+            //updatableNodes.Clear();
+
+            //foreach (var node in nodes)
+            //{
+            //    IUpdatable updatable = node as IUpdatable;
+            //    Debug.Log(" updateUpdatableNodes " + name + " " + node.GetType().Name + " updatable: " + (updatable != null));
+            //    if (updatable != null)
+            //    {
+            //        updatableNodes.Add(updatable);
+            //    }
+            //}
+
+            //Debug.Log(" updateUpdatableNodes Count: " + updatableNodes.Count + name + " ");
         }
 
         /// <summary> Safely remove a node and all its connections </summary>
@@ -311,6 +317,7 @@ namespace XMonoNode
             var nodesList = new List<MonoNode>(nodes);
             nodesList.Remove(node as MonoNode);
             nodes = nodesList.ToArray();
+            updateUpdatableNodesArray();
             if (Application.isPlaying) DestroyImmediate(node as UnityEngine.Object);
         }
 
@@ -346,7 +353,7 @@ namespace XMonoNode
 
         protected virtual void Init()
         {
-
+          
         }
 
         public void OnBeforeSerialize()
@@ -354,20 +361,31 @@ namespace XMonoNode
             try // GetComponents() causes NullreferenceException in reset()
             {
                 nodes = GetComponents<MonoNode>();
+                //updateUpdatableNodesArray();
                 Init();
             }
             catch
             {
             }
             MonoNode.graphHotfix = this;
+            //updatableNodes.Clear();
             for (int i = 0; i < nodes.Length; i++)
             {
-                if (nodes[i] != null)
+                MonoNode node = nodes[i];
+                if (node != null)
                 {
-                    nodes[i].OnNodeEnable();
-                    nodes[i].graph = this;
+                    node.OnNodeEnable();
+                    node.graph = this;
+
+                    //IUpdatable updatable = node as IUpdatable;
+                    //Debug.Log(" beforeSerialize " + name + " " +  i + ") " + node.GetType().Name + " updatable: " + (updatable != null));
+                    //if (updatable != null)
+                    //{
+                    //    updatableNodes.Add(updatable);
+                    //}
                 }
             }
+            //Debug.Log(" beforeSerialize Count: " + updatableNodes.Count + name + " ");
             MonoNode.graphHotfix = null;
         }
 

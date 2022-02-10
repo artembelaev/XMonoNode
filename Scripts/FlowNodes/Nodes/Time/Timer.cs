@@ -6,7 +6,7 @@ namespace XMonoNode
 {
     [CreateNodeMenu("Time/Timer", 538)]
     [NodeWidth(150)]
-    public class Timer : MonoNode, IFlowNode
+    public class Timer : MonoNode, IFlowNode, IUpdatable
     {
         [Inline]
         [Input(backingValue: ShowBackingValue.Never,
@@ -84,6 +84,7 @@ namespace XMonoNode
         private NodePort remainingPercentPort;
 
         private float remainingSec = 0.0f;
+        private float deltaTime = 0f;
 
         private enum TimerState
         {
@@ -148,11 +149,11 @@ namespace XMonoNode
             StopTimer();
         }
 
-        public override void ConditionalUpdate()
+        public void OnUpdate(float deltaTime)
         {
             if (state == TimerState.Started)
             {
-                TickTimer();
+                TickTimer(deltaTime);
             }
         }
 
@@ -211,9 +212,9 @@ namespace XMonoNode
                 state = TimerState.Stopped;
             }
         }
-        private void TickTimer()
+        private void TickTimer(float deltaTime)
         {
-            remainingSec -= graph.DeltaTime;
+            remainingSec -= deltaTime;
             FlowUtils.FlowOutput(tickPort);
             if (remainingSec <= 0.0f)
             {

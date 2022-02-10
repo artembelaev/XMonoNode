@@ -6,7 +6,7 @@ namespace XMonoNode
 {
     [CreateNodeMenu("Time/Wait For Next Frame", 536)]
     [NodeWidth(160)]
-    public class WaitForNextFrameNode : FlowNodeInOut
+    public class WaitForNextFrameNode : FlowNodeInOut, IUpdatable
     {
         private long flowUpdateNumber = -1;
 
@@ -30,7 +30,7 @@ namespace XMonoNode
             }
         }
 
-        public override void CustomUpdate()
+        public void OnUpdate(float deltaTime)
         {
             if (flowUpdateNumber == Time.frameCount)
             {

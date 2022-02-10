@@ -13,7 +13,7 @@ namespace XMonoNode
     [NodeTint(105, 65, 65)]
     [NodeWidth(150)]
    // [ExecuteInEditMode]
-    public class XSoundNodePlay : FlowNodeInOut
+    public class XSoundNodePlay : FlowNodeInOut, IUpdatable
     {
         [Inline]
         [Input(connectionType: ConnectionType.Override, typeConstraint: TypeConstraint.Inherited, backingValue: ShowBackingValue.Never)]
@@ -89,7 +89,7 @@ namespace XMonoNode
             
         }
 
-        public override void CustomUpdate()
+        public void OnUpdate(float deltaTime)
         {
             if (SourcesIsPlaying) // зук проигрывается сейчас
             {

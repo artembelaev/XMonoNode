@@ -149,20 +149,13 @@ namespace XMonoNode
             return listenerTransform == null || (listenerTransform.position - transform.position).sqrMagnitude<maxListenerDistanceSqr;
         }
 
-    public override void CustomUpdate()
+        protected override void OnUpdate(float deltaTime)
         {
             if (Check())
             {
-                base.CustomUpdate();
+                base.OnUpdate(deltaTime);
             }
         }
 
-        public override void CustomFixedUpdate()
-        {
-            if (Check())
-            {
-                base.CustomFixedUpdate();
-            }
-        }
     }
 }

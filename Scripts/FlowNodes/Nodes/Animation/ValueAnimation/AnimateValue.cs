@@ -52,7 +52,7 @@ namespace XMonoNode
 
     }
 
-    public abstract class AnimateValue<T> : AnimateValue
+    public abstract class AnimateValue<T> : AnimateValue, IUpdatable
     {
         [Input(connectionType: ConnectionType.Override), Inline]
         public T from = default(T);
@@ -124,11 +124,11 @@ namespace XMonoNode
             StopTimer();
         }
 
-        public override void ConditionalUpdate()
+        public virtual void OnUpdate(float deltaTime)
         {
             if (state == State.Started)
             {
-                TickTimer();
+                TickTimer(deltaTime);
             }
         }
 
@@ -153,9 +153,9 @@ namespace XMonoNode
 
         protected abstract T GetValue(float tNormal);
 
-        private void TickTimer()
+        private void TickTimer(float deltaTime)
         {
-            remainingSec -= graph.DeltaTime;
+            remainingSec -= deltaTime;
             FlowUtils.FlowOutput(TickPort);
             if (remainingSec <= 0.0f || duration <= 0f)
             {

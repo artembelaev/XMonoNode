@@ -9,7 +9,7 @@ namespace XMonoNode
     [AddComponentMenu("X Sound Node/Fade Out", 311)]
     [CreateNodeMenu("Sound/Fade Out", 311)]
     [NodeWidth(180)]
-    public class XSoundNodeFadeOut : FlowNodeInOut
+    public class XSoundNodeFadeOut : FlowNodeInOut, IUpdatable
     {
         [Inline]
         [Input(connectionType: ConnectionType.Override, typeConstraint: TypeConstraint.Inherited, backingValue: ShowBackingValue.Never)]
@@ -106,11 +106,11 @@ namespace XMonoNode
             }
         }
 
-        public override void ConditionalUpdate()
+        public void OnUpdate(float deltaTime)
         {
             if (state == State.Started)
             {
-                TickTimer();
+                TickTimer(deltaTime);
             }
         }
 
@@ -138,9 +138,9 @@ namespace XMonoNode
             }
         }
 
-        private void TickTimer()
+        private void TickTimer(float deltaTime)
         {
-            remainingSec -= graph.DeltaTime;
+            remainingSec -= deltaTime;
             if (remainingSec <= 0.0f || duration <= 0f)
             {
                 TimerCompleted();
