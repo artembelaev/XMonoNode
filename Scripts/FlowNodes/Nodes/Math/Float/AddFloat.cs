@@ -4,7 +4,7 @@ using XMonoNode;
 namespace XMonoNode
 {
     [CreateNodeMenu("Float/Add", -199)]
-    [NodeWidth(170)]
+    [NodeWidth(120)]
     public class AddFloat : MonoNode
     {
         public enum Operation
@@ -15,10 +15,14 @@ namespace XMonoNode
             Divide,
         }
 
-        [Input] public float FloatA;
-        [Input] public float FloatB;
+        [Input, HideLabel]
+        public float FloatA;
+        [Input, HideLabel]
+        public float FloatB;
+        [HideLabel]
         public Operation operation;
-        [Output] public float Result;
+        [Output]
+        public float Result;
 
         protected NodePort FloatAPort = null;
         protected NodePort FloatBPort = null;

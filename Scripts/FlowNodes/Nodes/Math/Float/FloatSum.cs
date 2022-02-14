@@ -4,11 +4,13 @@ using XMonoNode;
 namespace XMonoNode
 {
     [CreateNodeMenu("Float/Sum", -198)]
-    [NodeWidth(160)]
+    [NodeWidth(150)]
     public class FloatSum : MonoNode
     {
-        [Input] public float a;
-        [Input] public float b;
+        [Input(connectionType: ConnectionType.Override), HideLabel]
+        public float a;
+        [Input(connectionType: ConnectionType.Override), HideLabel]
+        public float b;
         [Output] public float result;
 
         private NodePort portA;
