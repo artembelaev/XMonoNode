@@ -120,7 +120,6 @@ namespace XMonoNode
             }
         }
 
-        [Obsolete]
         public void UpdateInputParameters(params object[] parameters)
         {
             Transform parent = parameters.Get<Transform>();
