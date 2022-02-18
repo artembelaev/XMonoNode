@@ -56,8 +56,9 @@ namespace XMonoNode
             {
 
                 instanciated = GameObject.Instantiate(graph);
-
+#if !UNITY_EDITOR
                 MonoBehaviour.DontDestroyOnLoad(instanciated.gameObject);
+#endif
                 allInstanciated.Enqueue(instanciated);
 
 #if UNITY_EDITOR

@@ -4,12 +4,15 @@ using XMonoNode;
 namespace XMonoNode
 {
     [CreateNodeMenu("Float/Mult", -196)]
-    [NodeWidth(160)]
+    [NodeWidth(110)]
     public class FloatMult : MonoNode
     {
-        [Input] public float a;
-        [Input] public float b;
         [Output] public float result;
+        [Input(connectionType: ConnectionType.Override), HideLabel]
+        public float a;
+        [Input(connectionType: ConnectionType.Override), HideLabel]
+        public float b;
+        
 
         private NodePort portA;
         private NodePort portB;
