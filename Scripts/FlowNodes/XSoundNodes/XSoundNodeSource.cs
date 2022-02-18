@@ -18,12 +18,14 @@ namespace XMonoNode
         {
         }
 
-        [Output(ShowBackingValue.Never, ConnectionType.Multiple, TypeConstraint.Inherited)]
-        public AudioSources audioOutput;
+        
 
         [XSoundSelector]
-        [SerializeField, HideLabel]
+        [SerializeField, HideLabel, Inline]
         private int                 soundId = -1;
+
+        [Output(ShowBackingValue.Never, ConnectionType.Multiple, TypeConstraint.Inherited), HideLabel]
+        public AudioSources audioOutput;
 
         [Input(connectionType: ConnectionType.Override), Hiding]
         public bool customParameters = false;

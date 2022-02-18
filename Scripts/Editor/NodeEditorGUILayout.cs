@@ -39,11 +39,11 @@ namespace XMonoNodeEditor {
             PropertyField(property, label, node, port, includeChildren);
         }
 
-        /// <summary> Make a field for a serialized property. Manual node port override. </summary>
-        public static void PropertyField(SerializedProperty property, XMonoNode.INode node, XMonoNode.NodePort port, bool includeChildren = true, params GUILayoutOption[] options)
-        {
-            PropertyField(property, null, node, port, includeChildren, options);
-        }
+        ///// <summary> Make a field for a serialized property. Manual node port override. </summary>
+        //public static void PropertyField(SerializedProperty property, XMonoNode.INode node, XMonoNode.NodePort port, bool includeChildren = true, params GUILayoutOption[] options)
+        //{
+        //    PropertyField(property, null, node, port, includeChildren, options);
+        //}
 
         /// <summary> Make a field for a serialized property. Manual node port override. </summary>
         public static void PropertyField(SerializedProperty property, GUIContent label, XMonoNode.INode node, XMonoNode.NodePort port, bool includeChildren = true, params GUILayoutOption[] options)
@@ -80,8 +80,7 @@ namespace XMonoNodeEditor {
                 }
                 else
                 {
-                    EditorGUILayout.PropertyField(property, label, includeChildren, GUILayout.MinWidth(30));
-                    
+                    EditorGUILayout.PropertyField(property, label, includeChildren/*, GUILayout.MinWidth(30)*/);
                 }
             }
             else
@@ -207,10 +206,9 @@ namespace XMonoNodeEditor {
                         dynamicPortList = outputAttribute.dynamicPortList;
                         showBacking = outputAttribute.backingValue;
                         typeConstraint = outputAttribute.typeConstraint;
-                        if (hideLabelAttribute == null)
-                        {
-                            label = portGuiContent(port);
-                        }
+
+                        label = hideLabelAttribute == null ? portGuiContent(port) : new GUIContent();
+
                     }
 
                     bool usePropertyAttributes = dynamicPortList ||
@@ -265,7 +263,8 @@ namespace XMonoNodeEditor {
                             case XMonoNode.ShowBackingValue.Unconnected:
                                 if (port.IsConnected)
                                 {
-                                    GUILayout.Label(label != null && label.text != "" ? label : new GUIContent(property.displayName, tooltip), NodeEditorResources.OutputPort, GUILayout.MinWidth(30));
+                                    GUILayout.Label(/*label != null && label.text != "" ? */label/* : new GUIContent(property.displayName, tooltip)*/,
+                                        NodeEditorResources.OutputPort/*, GUILayout.MinWidth(30)*/);
                                 }
                                 else
                                 {
@@ -273,7 +272,9 @@ namespace XMonoNodeEditor {
                                 }
                                 break;
                             case XMonoNode.ShowBackingValue.Never:
-                                GUILayout.Label(label != null && label.text != "" ? label : new GUIContent(property.displayName, tooltip), NodeEditorResources.OutputPort, GUILayout.MinWidth(30));
+                                GUILayout.Label(
+                                    /*label != null && label.text != "" ? */label/* : new GUIContent(property.displayName, tooltip)*/,
+                                    NodeEditorResources.OutputPort/*, GUILayout.MinWidth(30)*/);
                                 break;
                             case XMonoNode.ShowBackingValue.Always:
                                 PropertyField(property, label, includeChildren);
@@ -305,11 +306,11 @@ namespace XMonoNodeEditor {
                 NodeEditorWindow.current != null &&
                 NodeEditorWindow.current.zoom > 1.3f)
             {
-                EditorGUILayout.LabelField(label, new GUIContent("zoom out..."), GUILayout.MinWidth(30));
+                EditorGUILayout.LabelField(label, new GUIContent("zoom out...")/*, GUILayout.MinWidth(30)*/);
             }
             else
             {
-                EditorGUILayout.PropertyField(property, label, includeChildren, GUILayout.MinWidth(30));
+                EditorGUILayout.PropertyField(property, label, includeChildren/*, GUILayout.MinWidth(30)*/);
             }
         }
 
@@ -332,7 +333,7 @@ namespace XMonoNodeEditor {
         /// <summary> Make a simple port field. </summary>
         public static void PortField(GUIContent label, XMonoNode.NodePort port, params GUILayoutOption[] options) {
             if (port == null) return;
-            if (options == null) options = new GUILayoutOption[] { GUILayout.MinWidth(30) };
+            if (options == null) options = new GUILayoutOption[] { /*GUILayout.MinWidth(30)*/ };
             Vector2 position = Vector3.zero;
             GUIContent content = label != null ? label : portGuiContent(port);
 
@@ -403,14 +404,6 @@ namespace XMonoNodeEditor {
             // Register the handle position
             Vector2 portPos = rect.center;
             NodeEditor.portPositions[port] = portPos;
-        }
-
-        /// <summary> Draws an input and an output port on the same line </summary>
-        public static void PortPair(XMonoNode.NodePort input, XMonoNode.NodePort output) {
-            GUILayout.BeginHorizontal();
-            NodeEditorGUILayout.PortField(input, GUILayout.MinWidth(0));
-            NodeEditorGUILayout.PortField(output, GUILayout.MinWidth(0));
-            GUILayout.EndHorizontal();
         }
 
         /// <summary>
