@@ -11,10 +11,10 @@ namespace XMonoNode
     /// </summary>
     [AddComponentMenu("Control/Time Access", 24)]
     [CreateNodeMenu("Control/Time Access", 24)]
-    [NodeWidth(210)]
+    [NodeWidth(130)]
     public class TimeAccessFlow : FlowNodeInOut
     {
-        [Input(connectionType: ConnectionType.Override, typeConstraint: TypeConstraint.Inherited), Inline]
+        [Input(connectionType: ConnectionType.Override, typeConstraint: TypeConstraint.Inherited), Inline, HideLabel]
         public float            minDeltaTime = 0.125f;
 
         [Output, Hiding]

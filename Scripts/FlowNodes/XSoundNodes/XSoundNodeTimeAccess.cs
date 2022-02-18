@@ -11,10 +11,10 @@ namespace XMonoNode
     /// </summary>
     [AddComponentMenu("X Sound Node/Time Access", 102)]
     [CreateNodeMenu("Sound/Time Access", 102)]
-    [NodeWidth(160)]
+    [NodeWidth(130)]
     public class XSoundNodeTimeAccess : XSoundNodeSimpleOutput
     {
-        [Input(connectionType: ConnectionType.Override, typeConstraint: TypeConstraint.Inherited)]
+        [Input(connectionType: ConnectionType.Override, typeConstraint: TypeConstraint.Inherited), HideLabel]
         public float            timeAccess = 0.125f;
 
         private double          lastTime = 0;
