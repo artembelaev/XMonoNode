@@ -10,7 +10,7 @@ namespace XMonoNode
     /// </summary>
     [AddComponentMenu("X Sound Node/Id Source", 0)]
     [CreateNodeMenu("Sound/Id Source", 0)]
-    [NodeWidth(240)]
+    [NodeWidth(260)]
     [NodeTint(70, 100, 70)]
     public class XSoundNodeSource : XSoundNodeBase
     {
