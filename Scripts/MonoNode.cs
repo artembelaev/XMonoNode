@@ -146,11 +146,15 @@ namespace XMonoNode {
 
         private void OnEnable()
         {
+#if UNITY_EDITOR
             OnNodeEnable();
+#endif
         }
 
         public virtual void OnNodeEnable()
         {
+            if (graph)
+
             if (graphHotfix != null) graph = graphHotfix;
             graphHotfix = null;
             UpdatePorts();
