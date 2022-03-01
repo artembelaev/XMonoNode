@@ -23,7 +23,7 @@ namespace XMonoNode
 
         public bool IsEmpty
         {
-            get => string.IsNullOrEmpty(FullPath);
+            get => containerFileName.Length == 0 || string.IsNullOrEmpty(FullPath);
         }
 
         public string PathToContainers
