@@ -16,7 +16,7 @@ namespace XMonoNode
 
         public new bool IsEmpty
         {
-            get => string.IsNullOrEmpty(graphId) || base.IsEmpty;
+            get => graphId.Length == 0 || base.IsEmpty;
         }
 
         public FlowNodeGraphGetter() :
