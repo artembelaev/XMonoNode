@@ -173,7 +173,7 @@ namespace XMonoNode {
         public T GetInputValue<T>()
         {
             object obj = GetInputValue();
-            return obj is T ? (T) obj : default(T);
+            return /*obj is T ? */(T) obj/* : default(T)*/;
         }
 
         /// <summary> Return the output value of the first connected port. Returns null if none found or invalid. </summary>
