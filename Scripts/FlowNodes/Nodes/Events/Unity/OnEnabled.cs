@@ -14,7 +14,9 @@ namespace XMonoNode
 
         private void OnEnable()
         {
+#if UNITY_EDITOR
             OnNodeEnable();
+#endif
             TriggerFlow();
         }
 

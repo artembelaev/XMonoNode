@@ -153,8 +153,6 @@ namespace XMonoNode {
 
         public virtual void OnNodeEnable()
         {
-            if (graph)
-
             if (graphHotfix != null) graph = graphHotfix;
             graphHotfix = null;
             UpdatePorts();
