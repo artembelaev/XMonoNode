@@ -54,13 +54,19 @@ namespace XMonoNode
         public override void Flow(NodePort flowPort)
         {
             double currentTime = CurrentTime();
-            minDeltaTime = GetInputValue(nameof(minDeltaTime), minDeltaTime);
+            minDeltaTime = minDeltaTimePort.GetInputValue(minDeltaTime);
 
-            bool less = currentTime - lastTime < minDeltaTime;
+            double delta = currentTime - lastTime;
 
-            lastTime = currentTime;
-
-            FlowUtils.FlowOutput(less ? lessDeltaPort : FlowOutputPort);
+            if (delta < minDeltaTime)
+            {
+                FlowUtils.FlowOutput(lessDeltaPort);
+            }
+            else
+            {
+                lastTime = currentTime;
+                FlowUtils.FlowOutput(FlowOutputPort);
+            }
         }
 
         public override object GetValue(NodePort port)
