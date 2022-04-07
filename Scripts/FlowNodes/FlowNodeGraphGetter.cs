@@ -84,6 +84,15 @@ namespace XMonoNode
             }
         }
 
+        public void Flow(Transform graphParent, params object[] parameters)
+        {
+            graph = GetGraph(graphParent);
+            if (graph != null)
+            {
+                graph.Flow(parameters);
+            }
+        }
+
         public void Flow(Dictionary<string, object> parameters)
         {
             graph = GetGraph();
