@@ -194,6 +194,24 @@ namespace XMonoNode {
             } 
 //#endif
         }
+         
+        public float GetInputValue(float def)
+        {
+            object obj = GetInputValue();
+            
+            if (obj != null)
+            {
+                if (obj is int)
+                {
+                    return (float)(int)obj;
+                }
+                return (float)obj;
+            }
+            else
+            {
+                return def;
+            }
+        }
 
         /// <summary> Return the output values of all connected ports. </summary>
         /// <returns> <see cref="NodePort.GetOutputValue"/> </returns>
