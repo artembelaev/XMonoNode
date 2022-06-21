@@ -5,55 +5,51 @@ using XMonoNode;
 
 namespace XMonoNode
 {
-    [CreateNodeMenu("Float/Min", 102)]
-    [NodeWidth(130)]
-    public class FloatMin : MonoNode
+    [CreateNodeMenu("Logic/And", 102)]
+    [NodeWidth(110)]
+    public class AndMulti : MonoNode
     {
         [Output]
-        public float min;
+        public bool And;
 
         [Input(
             backingValue: ShowBackingValue.Unconnected,
             connectionType: ConnectionType.Override,
             dynamicPortList: true)]
 
-        public List<float> inputs = new List<float>();
-        
+        public List<bool> inputs = new List<bool>();
+
         private void Reset()
         {
-            inputs.Add(1);
-            inputs.Add(2);
-            inputs.Add(3);
+            inputs.Add(false);
+            inputs.Add(false);
         }
 
         public override object GetValue(NodePort port)
         {
-            return GetMin();
+            return GetAnd();
         }
 
-        private float GetMin()
+        private bool GetAnd()
         {
             if (inputs.Count == 0)
             {
-                return 0;
+                return false;
             }
-
-            float min = inputs[0];
 
             for (int i = 0; i < inputs.Count; ++i)
             {
                 NodePort port = GetPort(nameof(inputs) + " " + i);
                 if (port != null)
                 {
-                    inputs[i] = port.GetInputValue(inputs[i]);
-                }
-                if (inputs[i] < min)
-                {
-                    min = inputs[i];
+                    if (!port.GetInputValue(inputs[i]))
+                    {
+                        return false;
+                    }
                 }
             }
 
-            return min;
+            return true;
         }
     }
 }
