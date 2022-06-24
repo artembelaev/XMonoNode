@@ -84,7 +84,6 @@ namespace XMonoNode
         private NodePort remainingPercentPort;
 
         private float remainingSec = 0.0f;
-        private float deltaTime = 0f;
 
         private enum TimerState
         {
