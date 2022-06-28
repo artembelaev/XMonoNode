@@ -4,13 +4,13 @@ using XMonoNode;
 namespace XMonoNode
 {
     [CreateNodeMenu("Logic/Logic Wait", 103)]
-    [NodeWidth(120)]
+    [NodeWidth(140)]
     public class LogicWait : MonoNode, IUpdatable
     {
-        [Input(connectionType: ConnectionType.Override, typeConstraint: TypeConstraint.Inherited), Inline]
+        [Input(connectionType: ConnectionType.Override, typeConstraint: TypeConstraint.Inherited), Inline, HideLabel]
         public bool input = false;
 
-        [Output]
+        [Output, HideLabel]
         public bool output = false;
 
 
