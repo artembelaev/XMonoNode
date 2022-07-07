@@ -288,6 +288,11 @@ namespace XMonoNode
             return GetComponents<OnFlowEventNode>();
         }
 
+        public void FlowGraph()
+        {
+            Flow();
+        }
+
         [ContextMenu("Flow")]
         public virtual void Flow()
         {

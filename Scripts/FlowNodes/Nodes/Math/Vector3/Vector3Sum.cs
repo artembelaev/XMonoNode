@@ -4,7 +4,7 @@ using XMonoNode;
 namespace XMonoNode
 {
     [CreateNodeMenu("Vector3/Sum", 3)]
-    [NodeWidth(150)]
+    [NodeWidth(170)]
     public class Vector3Sum : MonoNode
     {
         [Input(connectionType: ConnectionType.Override), HideLabel]
