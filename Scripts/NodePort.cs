@@ -198,14 +198,10 @@ namespace XMonoNode {
         public float GetInputValue(float def)
         {
             object obj = GetInputValue();
-            
+
             if (obj != null)
             {
-                if (obj is int)
-                {
-                    return (float)(int)obj;
-                }
-                return (float)obj;
+                return obj is int ? (float)(int)obj : (float)obj;
             }
             else
             {
@@ -235,30 +231,6 @@ namespace XMonoNode {
                 value = default(T);
                 return false;
             }
-        }
-
-        /// <summary> Return the sum of all inputs. </summary>
-        /// <returns> <see cref="NodePort.GetOutputValue"/> </returns>
-        public float GetInputSum(float fallback) {
-            object[] objs = GetInputValues();
-            if (objs.Length == 0) return fallback;
-            float result = 0;
-            for (int i = 0; i < objs.Length; i++) {
-                if (objs[i] is float) result += (float) objs[i];
-            }
-            return result;
-        }
-
-        /// <summary> Return the sum of all inputs. </summary>
-        /// <returns> <see cref="NodePort.GetOutputValue"/> </returns>
-        public int GetInputSum(int fallback) {
-            object[] objs = GetInputValues();
-            if (objs.Length == 0) return fallback;
-            int result = 0;
-            for (int i = 0; i < objs.Length; i++) {
-                if (objs[i] is int) result += (int) objs[i];
-            }
-            return result;
         }
 
         /// <summary> Connect this <see cref="NodePort"/> to another </summary>

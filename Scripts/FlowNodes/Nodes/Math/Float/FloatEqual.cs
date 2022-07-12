@@ -7,8 +7,8 @@ namespace XMonoNode
     [NodeWidth(160)]
     public class FloatEqual : MonoNode
     {
-        [Input] public float a;
-        [Input] public float b;
+        [Input(connectionType: ConnectionType.Override)] public float a;
+        [Input(connectionType: ConnectionType.Override)] public float b;
         [Output] public bool result;
 
         private NodePort portA;

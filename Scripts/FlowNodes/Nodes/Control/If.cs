@@ -8,7 +8,7 @@ namespace XMonoNode
     public class If : FlowNodeInOut
     {
         [Inline]
-        [Input, NodeInspectorButton] public bool condition;
+        [Input(connectionType: ConnectionType.Override), NodeInspectorButton] public bool condition;
         [Output, NodeInspectorButton] public Flow Else;
 
         NodePort conditionPort;
