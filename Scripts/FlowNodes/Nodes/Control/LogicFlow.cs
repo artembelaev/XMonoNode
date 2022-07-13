@@ -15,15 +15,19 @@ namespace XMonoNode
     public class LogicFlow : MonoNode, IFlowNode, IUpdatable
     {
         [Input(connectionType: ConnectionType.Override, backingValue: ShowBackingValue.Never, typeConstraint: TypeConstraint.Inherited), HideLabel, Inline]
-        public bool input;
+        public bool                             input;
 
         [Output(backingValue: ShowBackingValue.Unconnected,
             connectionType: ConnectionType.Multiple,
             typeConstraint: TypeConstraint.None), NodeInspectorButton, HideLabel]
-        public Flow Exit;
+        public Flow                             Exit;
 
-        private NodePort exitPort;
-        private NodePort inputPort = null;
+        [SerializeField, Hiding, Tooltip("Good for optimization")]
+        private bool                            oneShot = false; 
+
+        private NodePort                        exitPort = null;
+        private NodePort                        inputPort = null;
+        private bool                            hasOneShot = false;
 
         protected override void Init()
         {
@@ -51,7 +55,7 @@ namespace XMonoNode
         /// </summary>
         public virtual void Stop()
         {
-
+            hasOneShot = false;
         }
 
         public override object GetValue(NodePort port)
@@ -61,10 +65,16 @@ namespace XMonoNode
 
         public void OnUpdate(float deltaTime)
         {
+            if (oneShot && hasOneShot)
+            {
+                return;
+            }
+
             bool inputNew = inputPort.GetInputValue(input);
             if (inputNew && !input) // 0 -> 1
             {
                 TriggerFlow();
+                hasOneShot = true;
             }
             input = inputNew;
         }
