@@ -7,13 +7,14 @@ namespace XMonoNode
     [NodeWidth(150)]
     public class FloatEqualDelta : MonoNode
     {
-        [Input(connectionType: ConnectionType.Override), HideLabel]
+        [Input(connectionType: ConnectionType.Override), HideLabel, Inline]
         public float a;
+        [Output, HideLabel] public bool result;
         [Input(connectionType: ConnectionType.Override), HideLabel]
         public float b;
         [Input(connectionType: ConnectionType.Override), Hiding]
         public float delta = 0.01f;
-        [Output] public bool result;
+        
 
         private NodePort portA;
         private NodePort portB;

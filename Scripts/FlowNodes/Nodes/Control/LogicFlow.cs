@@ -11,7 +11,7 @@ namespace XMonoNode
     /// </summary>
     [AddComponentMenu("Control/Logic Flow", 25)]
     [CreateNodeMenu("Control/Logic Flow", 25)]
-    [NodeWidth(120)]
+    [NodeWidth(130)]
     public class LogicFlow : MonoNode, IFlowNode, IUpdatable
     {
         [Input(connectionType: ConnectionType.Override, backingValue: ShowBackingValue.Never, typeConstraint: TypeConstraint.Inherited), HideLabel, Inline]

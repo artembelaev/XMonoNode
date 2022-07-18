@@ -18,12 +18,6 @@ namespace XMonoNodeEditor {
         /// <summary> Make a field for a serialized property. Automatically displays relevant node port. </summary>
         public static void PropertyField(SerializedProperty property, bool includeChildren = true, params GUILayoutOption[] options)
         {
-            PropertyField(property, (GUIContent)null, includeChildren, options);
-        }
-
-        /// <summary> Make a field for a serialized property. Automatically displays relevant node port. </summary>
-        public static void PropertyField(SerializedProperty property, GUIContent label, bool includeChildren = true, params GUILayoutOption[] options)
-        {
             if (property == null)
                 throw new NullReferenceException();
 
@@ -33,20 +27,14 @@ namespace XMonoNodeEditor {
             {
                 return;
             }
-
+            
             XMonoNode.NodePort port = node.GetPort(property.name);
 
-            PropertyField(property, label, node, port, includeChildren);
+            PropertyField(property, node, port, includeChildren);
         }
 
-        ///// <summary> Make a field for a serialized property. Manual node port override. </summary>
-        //public static void PropertyField(SerializedProperty property, XMonoNode.INode node, XMonoNode.NodePort port, bool includeChildren = true, params GUILayoutOption[] options)
-        //{
-        //    PropertyField(property, null, node, port, includeChildren, options);
-        //}
-
         /// <summary> Make a field for a serialized property. Manual node port override. </summary>
-        public static void PropertyField(SerializedProperty property, GUIContent label, XMonoNode.INode node, XMonoNode.NodePort port, bool includeChildren = true, params GUILayoutOption[] options)
+        public static void PropertyField(SerializedProperty property, XMonoNode.INode node, XMonoNode.NodePort port, bool includeChildren = true, params GUILayoutOption[] options)
         {
             if (property == null)
                 throw new NullReferenceException();
@@ -58,15 +46,12 @@ namespace XMonoNodeEditor {
 
             NodeEditorUtilities.GetCachedAttrib(node.GetType(), property.name, out XMonoNode.HideLabelAttribute hideLabelAttribute);
 
-            if (hideLabelAttribute != null || label == null)
-            {
-                label = new GUIContent();
-            }
-
+            GUIContent label = hideLabelAttribute == null ? new GUIContent(property.displayName) : new GUIContent();
 
             // If property is not a port, display a regular property field
             if (port == null)
             {
+                
                 if (node.ShowState == XMonoNode.INode.ShowAttribState.Minimize ||
                     (hidding != null && node.ShowState == XMonoNode.INode.ShowAttribState.ShowBase))
                 {// Пропускаем скрытые свойства
@@ -76,7 +61,7 @@ namespace XMonoNodeEditor {
 
                 if (NodeEditorPreferences.GetSettings().showPortButton(buttonAttribute))
                 {
-                    GUILayout.Button(label != null ? label : new GUIContent(property.displayName));
+                    GUILayout.Button(label);
                 }
                 else
                 {
