@@ -4,13 +4,13 @@ using XMonoNode;
 namespace XMonoNode
 {
     [CreateNodeMenu("Logic/Not", 102)]
-    [NodeWidth(110)]
+    [NodeWidth(70)]
     public class Not : MonoNode
     {
-        [Input(connectionType: ConnectionType.Override, backingValue: ShowBackingValue.Never, typeConstraint: TypeConstraint.Inherited), Inline]
+        [Input(connectionType: ConnectionType.Override, backingValue: ShowBackingValue.Never, typeConstraint: TypeConstraint.Inherited), Inline, HideLabel]
         public bool Input;
 
-        [Output]
+        [Output, HideLabel]
         public bool Result;
 
         protected NodePort InputPort = null;

@@ -5,7 +5,7 @@ using XMonoNode;
 namespace XMonoNode
 {
     [CreateNodeMenu("Time/Wait For Seconds", 532)]
-    [NodeWidth(150)]
+    [NodeWidth(130)]
     public class WaitForSecondsNode : FlowNodeInOut
     {
         [Input(backingValue: ShowBackingValue.Never,
@@ -15,7 +15,7 @@ namespace XMonoNode
             Hiding]
         public Flow stop;
 
-        [Input] public float WaitSeconds;
+        [Input(connectionType: ConnectionType.Override), HideLabel] public float WaitSeconds;
 
         private bool flow = false;
 

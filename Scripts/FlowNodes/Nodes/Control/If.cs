@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace XMonoNode
 {
-    [NodeWidth(175)]
+    [NodeWidth(160)]
     [CreateNodeMenu("Control/" + nameof(If), 11)]
     public class If : FlowNodeInOut
     {
