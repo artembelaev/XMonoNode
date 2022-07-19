@@ -4,7 +4,7 @@ using XMonoNode;
 namespace XMonoNode
 {
     [CreateNodeMenu("GameObject/SetActive", 404)]
-    [NodeWidth(170)]
+    [NodeWidth(150)]
     public class SetActive : FlowNodeInOut 
     {
         public enum ActiveOptions
@@ -14,9 +14,10 @@ namespace XMonoNode
             Toggle,
         }
 
-        [Input(connectionType: ConnectionType.Override, typeConstraint: TypeConstraint.Inherited)]
+        [Input(connectionType: ConnectionType.Override, typeConstraint: TypeConstraint.Inherited), HideLabel]
         public GameObject Target;
 
+        [SerializeField, HideLabel]
         public ActiveOptions Options;
 
         public override void Flow(NodePort flowPort)
