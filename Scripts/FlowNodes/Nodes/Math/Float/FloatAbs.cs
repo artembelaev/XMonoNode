@@ -4,10 +4,11 @@ using XMonoNode;
 namespace XMonoNode
 {
     [CreateNodeMenu("Float/Abs", -189)]
-    [NodeWidth(160)]
+    [NodeWidth(90)]
     public class FloatAbs : MonoNode
     {
-        [Input] public float x;
+        [Input(connectionType: ConnectionType.Override), Inline, HideLabel]
+        public float x;
         [Output] public float result;
 
         private NodePort portX;
