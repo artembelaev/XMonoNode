@@ -23,9 +23,8 @@ namespace XMonoNode
         [Input(connectionType: ConnectionType.Override, typeConstraint: TypeConstraint.Inherited), HideLabel]
         public T                                Value;
 
-
         private NodePort                        ValuePort = null;
-        private int                             hash = -1;
+
         protected override void Init()
         {
             base.Init();
@@ -36,6 +35,7 @@ namespace XMonoNode
         {
             T value = ValuePort.GetInputValue(Value);
             SetAnimatorValue(animator, paramName, value);
+            FlowOut();
         }
 
         protected abstract void SetAnimatorValue(Animator animator, string name, T value);
