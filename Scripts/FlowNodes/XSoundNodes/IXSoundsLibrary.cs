@@ -44,6 +44,15 @@ namespace XMonoNode
                 {
                     instance = obj.GetComponent<IXSoundsLibrary>();
                 }
+                else
+                {
+                    Debug.Log("IXSoundsLibrary not found");
+                }
+
+                if (instance == null)
+                {
+                    Debug.Log("IXSoundsLibrary is null");
+                }
             }
             return instance;
         }
