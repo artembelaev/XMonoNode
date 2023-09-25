@@ -60,7 +60,7 @@ To add xNode as a [submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodule
 run the following git command from your project root:
 
 ```
-git submodule add git@github.com:ArtemBelaev-ural/XMonoNode.git Assets/Submodules/xMonoNode
+git submodule add git@github.com:artembelaev/XMonoNode.git Assets/Submodules/xMonoNode
 ```
 
 ### Installing 'the old way'
