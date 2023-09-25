@@ -22,7 +22,7 @@ XMonoNode contains a ready-made extensible node library that includes rich featu
 * Custom node inspector code is very similar to regular custom inspector code
 * Undo/redo support
 * MonoBehaviour nodes support
-* Working whith prefabs
+* Working with prefabs
 * Node library that includes:
     * sound nodes (Play, Source, Pitch), 
     * tween animation nodes,
