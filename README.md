@@ -16,19 +16,19 @@ XMonoNode contains a ready-made extensible node library that includes rich featu
 ### Key features
 * Lightweight in runtime
 * Very little boilerplate code
-* Strong separation of editor and runtime code
-* No runtime reflection (unless you need to edit/build node graphs at runtime. In this case, all reflection is cached.)
-* Does not rely on any 3rd party plugins
-* Custom node inspector code is very similar to regular custom inspector code
-* Undo/redo support
 * MonoBehaviour nodes support
 * Working with prefabs
+* Strong separation of editor and runtime code
+* No runtime reflection
+* Does not rely on any 3rd party plugins
+* Node's inspector code is similar to regular inspector code
+* Undo/redo support
 * Node library that includes:
     * sound nodes (Play, Source, Pitch), 
     * tween animation nodes,
-	* math nodes,
-	* unity event nodes (OnStart, OnUpdate, ...)
-	* utilities (Wait, Log, Random, Branch, ...)
+    * math nodes,
+    * unity event nodes (OnStart, OnUpdate, ...)
+    * utilities (Wait, Log, Random, Branch, ...)
 
 
 ### Wiki
