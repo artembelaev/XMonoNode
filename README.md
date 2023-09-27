@@ -30,6 +30,10 @@ XMonoNode contains a ready-made extensible node library that includes rich featu
     * unity event nodes (OnStart, OnUpdate, ...)
     * utilities (Wait, Log, Random, Branch, ...)
 
+<p align="center">
+  <img width = 80% src="https://github.com/artembelaev/XMonoNode/assets/12776336/914c4f90-d069-45ff-b655-233658d07810">
+</p>
+
 
 ### Wiki
 * [Getting started](https://github.com/Siccity/xNode/wiki/Getting%20Started) - create your very first node node and graph
